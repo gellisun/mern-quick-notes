@@ -9,3 +9,7 @@ export async function createNote(noteData) {
 export async function getNotes() {
   return sendRequest(BASE_URL);
 }
+
+export async function deleteNote(noteId) {
+  return sendRequest(`${BASE_URL}/${noteId}`, 'DELETE');
+}

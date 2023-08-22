@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { checkToken } from "../../utilities/users-service";
 import { getToken } from "../../utilities/users-service";
 import NotesForm from "../../components/NotesForm/NotesForm";
@@ -8,11 +8,18 @@ import * as notesService from "../../utilities/notes-service";
 export default function OrderHistoryPage() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  useEffect(() => {
+    loadNotes();
+  }, [sortOrder]);
 
   async function loadNotes() {
     try {
       const fetchedNotes = await notesService.fetchNotes();
-      setNotes(fetchedNotes);
+      const sortedNotes =
+        sortOrder === "asc" ? fetchedNotes : fetchedNotes.reverse();
+      setNotes(sortedNotes);
     } catch (err) {
       console.error("Error fetching notes:", err);
     } finally {
@@ -29,7 +36,7 @@ export default function OrderHistoryPage() {
     try {
       await notesService.createNote({ text: newNote });
       await loadNotes();
-      console.log(notes)
+      console.log(notes);
     } catch (err) {
       console.error(err);
     }
@@ -37,17 +44,28 @@ export default function OrderHistoryPage() {
 
   const token = getToken();
 
+  async function handleDeleteNote(noteId) {
+    try {
+      await notesService.deleteNote(noteId);
+      const updatedNotes = notes.filter((note) => note._id !== noteId);
+      setNotes(updatedNotes);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <>
       <h1>OrderHistoryPage</h1>
       <button onClick={handleCheckToken}>Check When My Login Expires</button>
       <NotesForm addNote={handleAddNote} />
+      <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
+        {sortOrder === "asc" ? "Descending order" : "Ascending order" }
+      </button>
       {notes.length > 0 ? (
         <div>
           {notes.map((note) =>
-            note.user ? (
-              <NoteCard key={note._id} note={note} />
-            ) : null
+            note.user ? <NoteCard key={note._id} note={note} deleteNote={handleDeleteNote} /> : null
           )}
         </div>
       ) : (

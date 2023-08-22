@@ -7,3 +7,7 @@ export async function createNote(noteData) {
 export async function fetchNotes() {
   return notesAPI.getNotes();
 }
+
+export async function deleteNote(noteId) {
+  return notesAPI.deleteNote(noteId);
+}

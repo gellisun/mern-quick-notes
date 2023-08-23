@@ -5,7 +5,7 @@ import NotesForm from "../../components/NotesForm/NotesForm";
 import NoteCard from "../../components/NoteCard/NoteCard";
 import * as notesService from "../../utilities/notes-service";
 
-export default function OrderHistoryPage() {
+export default function NotesHistoryPage() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");

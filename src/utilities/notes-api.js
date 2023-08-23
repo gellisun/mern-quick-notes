@@ -13,3 +13,7 @@ export async function getNotes() {
 export async function deleteNote(noteId) {
   return sendRequest(`${BASE_URL}/${noteId}`, 'DELETE');
 }
+
+export async function updateNote(noteId, noteData) {
+  return sendRequest(`${BASE_URL}/${noteId}`, 'PUT', noteData);
+}

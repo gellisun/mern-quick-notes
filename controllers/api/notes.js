@@ -4,6 +4,7 @@ module.exports = {
     getNotes,
     createNote,
     deleteNote,
+    updateNote,
 }
 
 async function getNotes(req, res) {
@@ -39,3 +40,19 @@ async function deleteNote(req, res) {
         res.status(500).json({err});
     }
 }
+
+async function updateNote(req, res) {
+    try {
+      const updatedNote = await Note.findByIdAndUpdate(
+        req.params.id,
+        { text: req.body.text },
+        { new: true }
+      );
+      if (!updatedNote) {
+        return res.status(404).json({ error: 'Not Found' });
+      }
+      res.status(200).json(updatedNote);
+    } catch (err) {
+      res.status(500).json({ err });
+    }
+  }

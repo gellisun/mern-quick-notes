@@ -54,18 +54,36 @@ export default function NotesHistoryPage() {
     }
   }
 
+  async function handleUpdateNote(noteId, newText) {
+    try {
+      await notesService.updateNote(noteId, newText);
+      await loadNotes();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <>
       <h1>OrderHistoryPage</h1>
       <button onClick={handleCheckToken}>Check When My Login Expires</button>
       <NotesForm addNote={handleAddNote} />
-      <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
-        {sortOrder === "asc" ? "Descending order" : "Ascending order" }
+      <button
+        onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+      >
+        {sortOrder === "asc" ? "Descending order" : "Ascending order"}
       </button>
       {notes.length > 0 ? (
         <div>
           {notes.map((note) =>
-            note.user ? <NoteCard key={note._id} note={note} deleteNote={handleDeleteNote} /> : null
+            note.user ? (
+              <NoteCard
+                key={note._id}
+                note={note}
+                deleteNote={handleDeleteNote}
+                updateNote={handleUpdateNote}
+              />
+            ) : null
           )}
         </div>
       ) : (

@@ -11,3 +11,7 @@ export async function fetchNotes() {
 export async function deleteNote(noteId) {
   return notesAPI.deleteNote(noteId);
 }
+
+export async function updateNote(noteId, newText) {
+  return notesAPI.updateNote(noteId, {text: newText});
+}
